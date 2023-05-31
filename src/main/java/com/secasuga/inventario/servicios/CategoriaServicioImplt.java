@@ -70,5 +70,39 @@ public class CategoriaServicioImplt implements InterfazCategoriaServicios{
 		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<CategoriaResponseRest> save(Categoria categoria) {
+		
+
+		CategoriaResponseRest response= new CategoriaResponseRest();
+		List<Categoria> 
+		lista = new ArrayList<>();
+		
+		try {
+			
+			Categoria categoriaGuardada = categoryDao.save(categoria);
+			if (categoriaGuardada != null) {
+				
+			lista.add(categoriaGuardada);
+			response.getCategoriaResponse().setCategoria(lista);
+			response.setMetadata("Correcto", "00", "Correcto al agregar nueva categoria");
+			}	else {
+				
+				response.setMetadata("Erroneo", "-1", "Categoria no guardada");
+				return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.BAD_REQUEST);
+			}
+			
+			
+		} catch (Exception e) {
+			
+			response.setMetadata("Erroneo", "-1", "Error al agregar nueva categoria");
+			e.getStackTrace();
+			return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
+	}
+
 
 }

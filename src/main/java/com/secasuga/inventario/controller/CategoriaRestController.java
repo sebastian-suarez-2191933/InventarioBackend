@@ -3,8 +3,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.secasuga.inventario.model.Categoria;
 import com.secasuga.inventario.response.CategoriaResponseRest;
 import com.secasuga.inventario.servicios.InterfazCategoriaServicios;
 
@@ -36,5 +40,18 @@ public class CategoriaRestController {
 		ResponseEntity<CategoriaResponseRest> response = servicios.searchById(id);
 		return response;
 	}
+	
+	/**
+	 * save categories
+	 * @param Categoria
+	 * @return
+	 */
+	@PostMapping("/categorias")
+	public ResponseEntity<CategoriaResponseRest> saveCategorias(@RequestBody Categoria categoria){
+	
+		ResponseEntity<CategoriaResponseRest> response = servicios.save(categoria);
+		return response;
+	}
+	
 	
 }
