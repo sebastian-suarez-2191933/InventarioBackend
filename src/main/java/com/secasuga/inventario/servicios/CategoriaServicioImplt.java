@@ -1,5 +1,7 @@
 package com.secasuga.inventario.servicios;
 import java.util.List;
+import java.util.Optional;
+import java.util.ArrayList;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,5 +37,38 @@ public class CategoriaServicioImplt implements InterfazCategoriaServicios{
 		}
 		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
 	}
+
+	@Override
+	@Transactional(readOnly= true)
+	public ResponseEntity<CategoriaResponseRest> searchById(Long id) {
+
+		CategoriaResponseRest response= new CategoriaResponseRest();
+		List<Categoria> 
+		lista = new ArrayList<>();
+		
+		try {
+			
+			Optional<Categoria> categoria = categoryDao.findById(id);
+			if(categoria.isPresent()) {
+				
+				lista.add(categoria.get());
+				response.getCategoriaResponse().setCategoria(lista);
+				response.setMetadata("Ok", "00", "Categoria encontrada");
+			}	else {
+		
+				response.setMetadata("Erroneo", "-1", "Categoria inexistente");
+				return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			
+		} catch (Exception e) {
+			response.setMetadata("Erroneo", "-1", "Error al consultar por Id");
+			e.getStackTrace();
+			return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
+	}
+
 
 }

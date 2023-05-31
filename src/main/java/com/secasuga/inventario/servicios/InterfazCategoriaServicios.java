@@ -5,5 +5,6 @@ import com.secasuga.inventario.response.CategoriaResponseRest;
 public interface InterfazCategoriaServicios {
 	
 	public ResponseEntity<CategoriaResponseRest> search();
+	public ResponseEntity<CategoriaResponseRest> searchById(Long id);
 
 }
