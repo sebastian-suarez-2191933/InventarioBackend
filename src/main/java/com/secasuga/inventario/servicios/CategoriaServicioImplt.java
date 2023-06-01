@@ -104,5 +104,53 @@ public class CategoriaServicioImplt implements InterfazCategoriaServicios{
 		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<CategoriaResponseRest> reSave(Categoria categoria, Long id) {
+		
+		
+
+		CategoriaResponseRest response= new CategoriaResponseRest();
+		List<Categoria> 
+		lista = new ArrayList<>();
+		
+		try {
+			
+			Optional<Categoria> categoriaSearch = categoryDao.findById(id);
+			
+			if (categoriaSearch.isPresent()) {
+				//Se procede a actualizar el categoria.
+				categoriaSearch.get().setName(categoria.getName());
+				categoriaSearch.get().setDescripcion(categoria.getDescripcion());
+				
+				Categoria categoriaToUpdate = categoryDao.save(categoriaSearch.get());
+				
+				if(categoriaToUpdate != null)
+				{
+					lista.add(categoriaToUpdate);
+					response.getCategoriaResponse().setCategoria(lista);
+					response.setMetadata("Correcto", "00", "Correcto al actualizar categoria");
+				} else {
+					response.setMetadata("Erroneo", "-1", "Categoria no actualizada");
+					return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.BAD_REQUEST);
+				}
+				
+			}	else {
+				response.setMetadata("Erroneo", "-1", "Categoria no encontarda");
+				return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+			
+			
+			
+		} catch (Exception e) {
+			
+			response.setMetadata("Erroneo", "-1", "Error al actualizar categoria");
+			e.getStackTrace();
+			return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
+	}
+
 
 }
