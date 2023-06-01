@@ -152,5 +152,32 @@ public class CategoriaServicioImplt implements InterfazCategoriaServicios{
 		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
 	}
 
+	@Override
+	@Transactional
+	public ResponseEntity<CategoriaResponseRest> deleteById(Long id) {
+		
+		
+		CategoriaResponseRest response= new CategoriaResponseRest();
+		
+		try {
+			
+			Optional<Categoria> categoriaToDelete = categoryDao.findById(id);
+			
+			if(categoriaToDelete != null) {
+			categoryDao.deleteById(id);
+			response.setMetadata("Ok", "00", "Categoria Eliminada");
+			}	else {
+				response.setMetadata("Eror", "-1", "Categoria No Encontrada");
+				return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.NOT_FOUND);
+			}
+		} catch (Exception e) {
+			response.setMetadata("Erroneo", "-1", "Error al eliminar");
+			e.getStackTrace();
+			return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.INTERNAL_SERVER_ERROR);
 
+		}
+		return new ResponseEntity<CategoriaResponseRest>(response, HttpStatus.OK);
+	}
+
+	
 }

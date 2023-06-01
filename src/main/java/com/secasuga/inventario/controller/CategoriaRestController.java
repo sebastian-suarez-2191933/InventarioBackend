@@ -1,6 +1,7 @@
 package com.secasuga.inventario.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -67,4 +68,15 @@ public class CategoriaRestController {
 		return response;
 	}
 	
+	/**
+	 * Delete category
+	 * @param id
+	 * @return
+	 */
+	@DeleteMapping("/categorias/{id}")
+	public ResponseEntity<CategoriaResponseRest> delete(@PathVariable Long id){
+	
+		ResponseEntity<CategoriaResponseRest> response = servicios.deleteById(id);
+		return response;
+	}
 }
